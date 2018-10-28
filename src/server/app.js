@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const cors = require('cors');
 const mongoose = require('mongoose');
+const passport = require('passport');
 const helmet = require('helmet');
 const app = express();
 
@@ -15,18 +16,20 @@ app.use('/uploads', express.static('uploads'));
 
 
 //mongodb
-const db = require('./config/database');
+const db = require('./config/keys').mongoURI;
 // Connect to MongoDB
 mongoose
-    .connect(db.url)
-    .then(() => console.log('MongoDB Connected'))
+    .connect(db,{ useNewUrlParser: true })
+    .then(() => {
+        console.log('mongodb connected')
+    })
     .catch(err => console.log(err));
+mongoose.set('useCreateIndex', true);
 
-//development 
-if(app.get('env') === 'development'){
-    app.use(morgan('tiny'));
-    console.log('morgan enabled')
-}
+// Passport Config
+require('./config/passport')(passport);
+// // Passport middleware
+app.use(passport.initialize());
 
 //routes
 require('./routes/api')(app);
@@ -45,6 +48,18 @@ app.use((req, res, next) => {
     }
 })
 
+// Server static assets if in production
+if (process.env.NODE_ENV === 'production') {
+    // Set static folder
+    app.use(express.static('client/build'));
+
+    app.get('*', (req, res) => {
+        res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+    });
+}else if (app.get('env') === 'development') {
+    app.use(morgan('tiny'));
+    console.log('morgan enabled')
+}
 
 //error handling page / middleware
 app.use((req, res, next) => {
