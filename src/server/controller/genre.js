@@ -6,7 +6,7 @@ const passport = require('passport');
 
 router.get('/', passport.authenticate('jwt', { session: false }), async (req, res) => {
   var pageNo = parseInt(req.query.pageNo)
-  var size = parseInt(req.query.size)
+  var size = parseInt(5)
   const genre = await Genre.find()
                           .skip((pageNo - 1) * size)
                           .limit(size)

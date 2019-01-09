@@ -5,13 +5,11 @@ const Movie = require('../model/movies')
 const passport = require('passport');
 
 router.get('/', passport.authenticate('jwt', { session: false }), async (req, res) => {
-    const pageNumber = 2;
-    const pageSize = 5;
-       
+  var pageNo = parseInt(req.query.pageNo)
+  var size = parseInt(req.query.size)
     const movies = await Movie.find()
-         .skip((pageNumber - 1) * pageSize)
-         .limit(pageSize)
-        .sort('name').populate('genre');
+          .skip((pageNo - 1) * size)
+          .limit(size)
     res.send(movies);
 });
 

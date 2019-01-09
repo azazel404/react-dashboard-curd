@@ -4,7 +4,8 @@ import { fetchGenre} from "../../../redux/actions/GenreActions";
 import Dashboard from "../../layouts/Dashboard";
 import Genrelist from "./Genre-list";
 import {Link} from "react-router-dom";
-
+import GenreSearch from "./Genre-fillter";
+//search state untuk state search
  class Genre extends Component {
 
   componentDidMount(){
@@ -23,6 +24,7 @@ import {Link} from "react-router-dom";
                 <div className="container-fluid">
                   <div className="row">
                     <div className="col-md-12">
+                    <GenreSearch />
                       {/* DATA TABLE*/}
                       <Link to="/genre-create" className="au-btn au-btn-icon au-btn--green au-btn--small mb-3">
                         Add Item
@@ -46,7 +48,8 @@ import {Link} from "react-router-dom";
 }
 const MapStateToProps = state => {
   return{
-    genre : state.genre
+    genre : state.genre,
+    searchState: state.genre.searchQuery
   }
 }
 

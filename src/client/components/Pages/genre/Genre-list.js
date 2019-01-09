@@ -8,9 +8,15 @@ import { Link } from "react-router-dom";
     handleDelete = (id) => {
         this.props.removeGenre(id);
     }
-    
+    ///filter untuk search data dari genre
     render() {
-      const genres = this.props.genres.map(genre => (
+        const {searchState} = this.props;
+        ///fillter search and mapping fetch data genre
+      const genres = this.props.genres
+         .filter(
+              genre => `${genre.name}`.toUpperCase().indexOf(searchState.toUpperCase()) >= 0
+                )
+      .map(genre => (
           <tr key={genre._id}>
               <td>{genre._id}</td>
               <td>{genre.name}</td>
@@ -40,5 +46,10 @@ import { Link } from "react-router-dom";
     )
   }
 }
-
-export default connect(null, { removeGenre })(GenreList);
+//get state props searchstate genre
+const MapStateToProps = (state) => {
+    return{
+        searchState: state.genre.searchQuery
+    }
+}
+export default connect(MapStateToProps, { removeGenre })(GenreList);

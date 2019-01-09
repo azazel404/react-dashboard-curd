@@ -3,7 +3,7 @@ import {
     GET_GENRE,
     DELETE_GENRE,
     GENRE_LOADING,
-    SET_TEXT_FILTER
+    FETCH_GENRE_SEARCH
 }
     from "./types";
 import axios from 'axios';
@@ -57,3 +57,11 @@ export const GenreLoading = () => {
     }
 }
 
+///actions search
+export const SearchGenre = query => dispatch => {
+    const response = query;
+    dispatch({
+        type:FETCH_GENRE_SEARCH,
+        payload : response
+    })
+}

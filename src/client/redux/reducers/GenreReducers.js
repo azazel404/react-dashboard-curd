@@ -2,7 +2,7 @@ import {
     GET_GENRES,
     GET_GENRE,
     DELETE_GENRE,
-    SET_TEXT_FILTER,
+    FETCH_GENRE_SEARCH,
     GENRE_LOADING
     }
 from "../actions/types";
@@ -11,7 +11,8 @@ from "../actions/types";
 const initialState = {
     genres : [],
     genre : {},
-    loading : true
+    loading : true,
+    searchQuery:''
 }
 
 export default function(state = initialState, action){
@@ -38,6 +39,12 @@ export default function(state = initialState, action){
                 ...state,
                 genres: state.genres.filter(genre => genre._id !== action.payload)
             };
+    ///pembuatan case state genre search
+        case FETCH_GENRE_SEARCH:
+            return{
+                ...state,
+                searchQuery : action.payload
+            }
         default:
             return state;
     }
